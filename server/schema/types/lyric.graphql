@@ -1,0 +1,6 @@
+type Lyric {
+    id: ID!,
+    content: String!,
+    likes: Int,
+    song: Song!
+}
