@@ -4,13 +4,14 @@ export default {
     songs: () => {
         return db.song.findAll({ })
     },
-    song: (param) => {
-        return db.song.findOne({ where: {id: param.id} }).then(song => {
+    song: (args) => {
+        return db.song.findOne({ where: {id: args.id} }).then(song => {
             console.log(song)
             return song;
           });
     },
-    addSong: () => {
-        return db.song.create(song);
+    addSong: (args) => {
+        console.log(args);
+        return db.song.create(args);
     }
 }
