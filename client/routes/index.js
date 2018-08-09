@@ -1,12 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import SongList from '../components/SongList';
+import MainRoute from '../../shared/router';
 
 const Routes = () => {
     <BrowserRouter >
-    <Switch>
-        <Route path='/songs' exact component={SongList} />
-    </Switch>
+        <MainRoute />
     </BrowserRouter>
 }
 

@@ -1,4 +1,4 @@
-const app = require('./server/server');
+import app from './server/server';
 
 // import { ApolloEngine } from 'apollo-engine';
 
@@ -20,6 +20,10 @@ const app = require('./server/server');
 //   console.log('Listening!');
 // });
 
-app.listen(4000, () => {
-  console.log('Listening');
+app.listen(4000, (err) => {
+  if (!err) {
+      console.log('😎 Server listening to port 4000.');
+  } else {
+      console.log('Error starting the server.');
+  }
 });

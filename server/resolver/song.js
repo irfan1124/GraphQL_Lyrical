@@ -5,7 +5,8 @@ export default {
         return db.song.findAll({ })
     },
     song: (args) => {
-        return db.song.findOne({ where: {id: args.id} }).then(song => {
+        return db.song.findOne({ where: {id: args.id} })
+        .then(song => {
             console.log(song)
             return song;
           });

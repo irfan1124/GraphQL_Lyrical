@@ -11,27 +11,37 @@ const query = gql`
     }
 `;                                                                                            
 class SongList extends Component {
-
-    renderSongs() {
-        <Query query={query}>
-            {({ loading, error, data }) => {
-            if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error :(</p>;
-
-            return data.songs.map(({ id, title }) => (
-                <li key={id} className="collection-item">
-                    {title}
-                </li>
-            ));
-            }}
-        </Query>
+    constructor() {
+        super();
+        this.state = {
+        };
     }
+
+    componentDidMount() {
+        console.log('did mount')
+    }
+
+        
 
     render() {
         return (
-            <ul className="collection">
-                {this.renderSongs()}
-            </ul>
+            <div>
+                test
+                <ul >
+                    <Query query={query}>
+                        {({ loading, error, data }) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(</p>;
+
+                        return data.songs.map(({ id, title }) => (
+                            <li key={id} className="collection-item">
+                                {title}
+                            </li>
+                        ));
+                        }}
+                    </Query>
+                </ul>
+            </div>
         )
     }
 }

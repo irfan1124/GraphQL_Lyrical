@@ -15,7 +15,7 @@ const Root = () => {
   )
 };
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <Root />,
-  document.getElementById('root')
+  document.getElementById('app')
 );
