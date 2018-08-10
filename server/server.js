@@ -5,9 +5,6 @@ import { ApolloServer } from 'apollo-server-express';
 const bodyParser = require('body-parser');
 const schema = require('./schema').default;
 const rootValue = require('./index').default
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
-const webpackConfigClient = require('../webpack.config.client.js');
 import serverRoutes from "./middleware/routes";
 
 const db = require('./db/config/config')
@@ -47,7 +44,5 @@ db.sequelize.authenticate()
 .catch((err) => {
   console.log('Unable to connect to the database:', err);
 });
-
-//app.use(webpackMiddleware(webpack(webpackConfigClient)));
 
 export default app;

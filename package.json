@@ -8,11 +8,9 @@
     "url": "https://github.com/irfan1124/GraphQL_Lyrical.git"
   },
   "scripts": {
-    "build:dev": "webpack -w",
-    "dev": "webpack --mode development --config webpack.config.client.js",
-    "dev-server": "node build/server/webpack",
-    "server": "nodemon --watch server  --exec  babel-node index.js ",
-    "start": "npm-run-all dev server",
+    "build:server": "nodemon --watch server  --exec  babel-node index.js ",
+    "build:dev": "webpack-dev-server --open",
+    "start": "npm run build:server & npm run build:dev",
     "schema": "sequelize-auto -h '127.0.0.1' -d 'lyrical' -u 'poseidon' -x 'poseidon' -p '3306'  --dialect mysql -o './server/db/models'"
   },
   "author": "",

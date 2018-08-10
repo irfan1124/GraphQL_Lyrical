@@ -30,8 +30,10 @@ module.exports = {
   devServer: {
     hot: true,
     port: 3000,
-    proxy: {
-      '/': 'http://localhost:4000'
-    }
+    //contentBase: path.join(__dirname, 'dist')
+    overlay: { // Shows a full-screen overlay in the browser when there are compiler errors or warnings
+      warnings: true, // default false
+      errors: true, //default false
+    },
   },
 };
