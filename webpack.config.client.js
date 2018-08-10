@@ -25,5 +25,12 @@ module.exports = {
   plugins: [],
   resolve: {
       extensions: ['.json', '.js', '.jsx', '.css']
-  }
+  },
+  devServer: {
+    hot: true,
+    port: 4001,
+    proxy: {
+      '/': 'http://localhost:4000'
+    }
+  },
 };

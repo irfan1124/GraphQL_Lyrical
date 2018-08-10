@@ -13,6 +13,8 @@ import serverRoutes from "./middleware/routes";
 const db = require('./db/config/config')
 const app = express();
 
+app.use(express.static('dist'));
+
 // set up Hbs
 app.set('views', path.join(process.cwd(), '/shared/views'));  
 app.engine('hbs', handlebars());
