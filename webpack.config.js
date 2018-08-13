@@ -2,8 +2,12 @@ var path = require('path');
 var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    watch: true,
+  watch: true,
   entry: path.join(__dirname, 'client', 'index.js'),
+  output: {
+    filename: 'main.js', 
+    path: path.resolve(__dirname, 'dist')
+  },
   //externals: [nodeExternals()], // in order to ignore all modules in node_modules folder 
   devtool: 'inline-source-map',
   module: {

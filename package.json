@@ -10,7 +10,7 @@
   "scripts": {
     "build:server": "nodemon --watch server  --exec  babel-node index.js ",
     "build:dev": "webpack-dev-server --open",
-    "start": "npm run build:server & npm run build:dev",
+    "start": "npm-run-all --parallel build:*",
     "schema": "sequelize-auto -h '127.0.0.1' -d 'lyrical' -u 'poseidon' -x 'poseidon' -p '3306'  --dialect mysql -o './server/db/models'"
   },
   "author": "",

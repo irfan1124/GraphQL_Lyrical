@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import MainRoute from '../../shared/router'
 
-import { ApolloClient } from 'apollo-client';
+import  ApolloClient  from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch  from 'node-fetch';
@@ -41,6 +41,7 @@ module.exports = (req, res, next) => {
     if(req.url === '/graphql') {
         return next()
     }
+    console.log("context.url" , context.url);
     if (context.url) {
 		res.writeHead(301, {
 			Location: context.url
