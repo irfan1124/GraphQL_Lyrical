@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import MainRoute from '../../shared/router'
 
-import  ApolloClient  from 'apollo-client';
+import  {ApolloClient}  from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch  from 'node-fetch';
@@ -13,7 +13,7 @@ const client = new ApolloClient({
     ssrMode: true,
     // Remember that this is the interface the SSR server will use to connect to the
     // API server, so we need to ensure it isn't firewalled, etc
-    link: createHttpLink({
+    link: new createHttpLink({
         fetch: fetch
     }),
     cache: new InMemoryCache(),
@@ -26,13 +26,11 @@ const renderToString = (url, context, store) => {
     
 
     return ReactDOMServer.renderToString(
-        <div id="app">
             <ApolloProvider client={client}>
                 <StaticRouter location={url} context={context}>
                     <MainRoute />
                 </StaticRouter>
             </ApolloProvider>
-        </div>
     );
 }
 

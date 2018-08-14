@@ -1,3 +1,5 @@
+require('dotenv').config();
+console.log(process.env.DEBUG);
 const express = require('express');
 var handlebars = require('express-handlebars');
 const path = require('path');

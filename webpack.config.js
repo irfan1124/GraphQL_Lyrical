@@ -1,25 +1,22 @@
 var path = require('path');
+var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   watch: true,
+  mode: 'development',
   entry: path.join(__dirname, 'client', 'index.js'),
   output: {
     filename: 'main.js', 
     path: path.resolve(__dirname, 'dist')
   },
   //externals: [nodeExternals()], // in order to ignore all modules in node_modules folder 
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
         use: 'babel-loader',
         test: /\.js$/,
         exclude: /(node_modules)/,
-        // query: {
-        //   presets: ['react', 'env'],
-        //  // plugins: ['transform-runtime']
-        // }
       },
       {
         use: ['style-loader', 'css-loader'],
@@ -27,17 +24,15 @@ module.exports = {
       }
     ]
   },
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        DEBUG: JSON.stringify(process.env.DEBUG),
+      }
+    })
+  ],
   resolve: {
-      extensions: ['.json', '.js', '.jsx', '.css']
-  },
-  devServer: {
-    hot: true,
-    port: 3000,
-    //contentBase: path.join(__dirname, 'dist')
-    overlay: { // Shows a full-screen overlay in the browser when there are compiler errors or warnings
-      warnings: true, // default false
-      errors: true, //default false
-    },
-  },
+      extensions: ['.json', '.js', '.jsx', '.css', '.hbs']
+  }
 };
