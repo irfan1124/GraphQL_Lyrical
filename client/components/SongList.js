@@ -51,7 +51,7 @@ class SongList extends Component {
                         {({ loading, error, data }) => {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error :(</p>;
-                        confirm.log(data, error, loading)
+                        console.log(data, error, loading)
                         return data.songs.map(({ id, title }) => (
                             <li key={id} className="collection-item">
                                 {title}
