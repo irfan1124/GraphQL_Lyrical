@@ -4,3 +4,7 @@ type Lyric {
     likes: Int,
     song: Song!
 }
+
+type Query {
+    lyrics: [Lyric]
+}

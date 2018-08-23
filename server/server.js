@@ -5,8 +5,10 @@ var handlebars = require('express-handlebars');
 const path = require('path');
 import { ApolloServer } from 'apollo-server-express';
 const bodyParser = require('body-parser');
-const schema = require('./schema').default;
-const rootValue = require('./index').default
+import { makeExecutableSchema } from 'graphql-tools'
+
+const typeDefs = require('./schema').default;
+const resolvers = require('./index').default
 import serverRoutes from "./middleware/routes";
 
 const db = require('./db/config/config')
@@ -21,6 +23,8 @@ app.set('view engine', 'hbs');
 
 var router = express.Router();
 app.use(router);
+
+const schema = makeExecutableSchema({typeDefs, resolvers})
 
 //Apollo Server
 const server = new ApolloServer({
