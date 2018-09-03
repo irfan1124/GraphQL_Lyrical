@@ -6,6 +6,7 @@ const path = require('path');
 import { ApolloServer } from 'apollo-server-express';
 const bodyParser = require('body-parser');
 import { makeExecutableSchema } from 'graphql-tools'
+const firebaseAdmin = require('firebase-admin');
 
 const typeDefs = require('./schema').default;
 const resolvers = require('./index').default
@@ -24,13 +25,37 @@ app.set('view engine', 'hbs');
 var router = express.Router();
 app.use(router);
 
+
+app.get('/auth/login', (req, res) => {
+  
+  //TODO: Check user credentials 
+        //- fetch user by email id
+        //- check password with argon2
+
+        //if user is valid generate token with jwt
+
+  // Mint token using Firebase Admin SDK
+  firebaseAdmin.auth().createCustomToken(uid)
+    .then(customToken => 
+      // Response must be an object or Firebase errors
+      res.json({firebaseToken: customToken})
+    )
+    .catch(err => 
+      res.status(500).send({
+        message: 'Something went wrong acquiring a Firebase token.',
+        error: err
+      })
+    );
+});
+
+
 const schema = makeExecutableSchema({typeDefs, resolvers})
 
 //Apollo Server
 const server = new ApolloServer({
   // These will be defined for both new or existing servers
   schema,
-  rootValue
+  //rootValue
 });
 app.use(bodyParser.json());
 // app.use('/graphql', expressGraphQL({

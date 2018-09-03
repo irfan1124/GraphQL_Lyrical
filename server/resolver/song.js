@@ -1,18 +1,26 @@
 import db from '../db/config/config';
 
 export default {
-    songs: () => {
-        return db.song.findAll({ })
+    Query: {
+        songs: () => {
+            return db.song.findAll({})
+        },
+        song: (args) => {
+            return db.song.findOne({
+                    where: {
+                        id: args.id
+                    }
+                })
+                .then(song => {
+                    console.log(song)
+                    return song;
+                });
+        }
     },
-    song: (args) => {
-        return db.song.findOne({ where: {id: args.id} })
-        .then(song => {
-            console.log(song)
-            return song;
-          });
-    },
-    addSong: (args) => {
-        console.log(args);
-        return db.song.create(args);
+	Mutation: {
+        addSong: (args) => {
+            console.log(args);
+            return db.song.create(args);
+        }
     }
 }

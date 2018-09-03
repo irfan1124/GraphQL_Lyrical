@@ -2,7 +2,7 @@ import db from '../db/config/config';
 
 export default {
     Query: {
-        lyrics = () => {
+        lyrics : () => {
             return db.lyric.findAll({ })
         }
     }
