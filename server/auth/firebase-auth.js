@@ -1,3 +1,5 @@
+const firebaseAdmin = require('firebase-admin');
+
 const config = require('./../config');
 
 // Initialize Firebase Admin with service account

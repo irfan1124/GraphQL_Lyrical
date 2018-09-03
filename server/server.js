@@ -11,6 +11,7 @@ const firebaseAdmin = require('firebase-admin');
 const typeDefs = require('./schema').default;
 const resolvers = require('./index').default
 import serverRoutes from "./middleware/routes";
+import { initializeFirebaseApp } from './auth/firebase-auth'
 
 const db = require('./db/config/config')
 const app = express();
@@ -33,6 +34,8 @@ app.get('/auth/login', (req, res) => {
         //- check password with argon2
 
         //if user is valid generate token with jwt
+  let uid = 'jwttokenjwttokenjwttoken';
+  initializeFirebaseApp();
 
   // Mint token using Firebase Admin SDK
   firebaseAdmin.auth().createCustomToken(uid)
