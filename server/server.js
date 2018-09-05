@@ -6,12 +6,11 @@ const path = require('path');
 import { ApolloServer } from 'apollo-server-express';
 const bodyParser = require('body-parser');
 import { makeExecutableSchema } from 'graphql-tools'
-const firebaseAdmin = require('firebase-admin');
 
 const typeDefs = require('./schema').default;
 const resolvers = require('./index').default
 import serverRoutes from "./middleware/routes";
-import { initializeFirebaseApp } from './auth/firebase-auth'
+import { initializeFirebaseApp ,loginWithFirebase, verifyToken } from './auth/firebase-auth'
 
 const db = require('./db/config/config')
 const app = express();
@@ -26,6 +25,8 @@ app.set('view engine', 'hbs');
 var router = express.Router();
 app.use(router);
 
+//initialize the firebase app with FirebaseAdmin and Firebase SDK
+initializeFirebaseApp();
 
 app.get('/auth/login', (req, res) => {
   
@@ -34,21 +35,16 @@ app.get('/auth/login', (req, res) => {
         //- check password with argon2
 
         //if user is valid generate token with jwt
-  let uid = 'jwttokenjwttokenjwttoken';
-  initializeFirebaseApp();
+  let uid = 'KP6XZjhdIrU8Y9M3Mc9L1PKIJW52';
+  loginWithFirebase(uid).then(accessToken => {
+    res.json({ success: true, accessToken: accessToken });
+    
+  }).catch(error => {
+    res.json({ success: false, message: error });
+  });
 
-  // Mint token using Firebase Admin SDK
-  firebaseAdmin.auth().createCustomToken(uid)
-    .then(customToken => 
-      // Response must be an object or Firebase errors
-      res.json({firebaseToken: customToken})
-    )
-    .catch(err => 
-      res.status(500).send({
-        message: 'Something went wrong acquiring a Firebase token.',
-        error: err
-      })
-    );
+  //res.json({ success: true, firebaseToken: customToken });
+
 });
 
 
