@@ -47,6 +47,21 @@ app.get('/auth/login', (req, res) => {
 
 });
 
+var guard = require('express-jwt-permissions')({
+  requestProperty: 'identity',
+  permissionsProperty: 'scope'
+})
+
+const errorHandler = (err, req, res, next) => {
+    if (err.code === 'permission_denied') {
+      res.status(403).send('Forbidden');
+    }
+}
+ 
+app.get('/user', guard.check(['user:read']), errorHandler,  function(req, res) { 
+  res.json({success: true})
+ })
+
 
 const schema = makeExecutableSchema({typeDefs, resolvers})
 

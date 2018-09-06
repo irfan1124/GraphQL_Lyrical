@@ -1,6 +1,8 @@
 import firebaseAdmin from 'firebase-admin';
 import firebase from 'firebase';
 
+import { replaceAll, trim } from '../../shared/format/string';
+
 
 const config = require('./../config');
 
@@ -13,6 +15,14 @@ let initializeFirebaseApp = () => {
     });
     firebase.initializeApp(config.FIREBASE_SDK_CONFIG);
 }
+
+//function to etract the token from authorization header
+let extractToken = (bearer) => {
+    if (bearer) {
+        return trim(replaceAll(bearer, 'Bearer', ''));
+    }
+    return null;
+};
 
 //middleware function to verify the token issued by firebase
 let verifyToken = function (req, res, next) {
@@ -34,10 +44,7 @@ let verifyToken = function (req, res, next) {
 // Mint token using Firebase Admin SDK
 let loginWithFirebase = (uid) => {
     let additionalClaims = {
-        "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/userinfo.email"
-            ]
+        "scopes":  "user:read"
     }
     return firebaseAdmin.auth().createCustomToken(uid, additionalClaims)
         .then(customToken => {
