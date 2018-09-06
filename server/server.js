@@ -10,7 +10,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 const typeDefs = require('./schema').default;
 const resolvers = require('./index').default
 import serverRoutes from "./middleware/routes";
-import { initializeFirebaseApp ,loginWithFirebase, verifyToken } from './auth/firebase-auth'
+import { initializeFirebaseApp, loginWithFirebase, verifyToken, addScopeToReq, revokeRefreshToken, getFirebaseUser } from './auth/firebase-auth'
 
 const db = require('./db/config/config')
 const app = express();
@@ -18,7 +18,7 @@ const app = express();
 app.use(express.static('dist'));
 
 // set up Hbs
-app.set('views', path.join(process.cwd(), '/shared/views'));  
+app.set('views', path.join(process.cwd(), '/shared/views'));
 app.engine('hbs', handlebars());
 app.set('view engine', 'hbs');
 
@@ -29,16 +29,16 @@ app.use(router);
 initializeFirebaseApp();
 
 app.get('/auth/login', (req, res) => {
-  
-  //TODO: Check user credentials 
-        //- fetch user by email id
-        //- check password with argon2
 
-        //if user is valid generate token with jwt
+  //TODO: Check user credentials 
+  //- fetch user by email id
+  //- check password with argon2
+
+  //if user is valid generate token with jwt
   let uid = 'KP6XZjhdIrU8Y9M3Mc9L1PKIJW52';
   loginWithFirebase(uid).then(accessToken => {
     res.json({ success: true, accessToken: accessToken });
-    
+
   }).catch(error => {
     res.json({ success: false, message: error });
   });
@@ -53,17 +53,30 @@ var guard = require('express-jwt-permissions')({
 })
 
 const errorHandler = (err, req, res, next) => {
-    if (err.code === 'permission_denied') {
-      res.status(403).send('Forbidden');
-    }
+  console.log(err);
+  if (err.code === 'permission_denied') {
+    res.status(403).send('Forbidden');
+  }
+  next();
 }
- 
-app.get('/user', guard.check(['user:read']), errorHandler,  function(req, res) { 
-  res.json({success: true})
- })
+
+app.get('/refreshRevoke', errorHandler, function (req, res) {
+  let uid = 'KP6XZjhdIrU8Y9M3Mc9L1PKIJW52';
+  revokeRefreshToken(uid).then(obj => {
+    console.log(obj)
+    res.json({ success: true,  obj });
+
+  }).catch(error => {
+    res.json({ success: false, message: error });
+  });
+})
+
+app.get('/user', verifyToken, addScopeToReq, guard.check(['user:read']), errorHandler, function (req, res) {
+  res.json({ success: true })
+})
 
 
-const schema = makeExecutableSchema({typeDefs, resolvers})
+const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 //Apollo Server
 const server = new ApolloServer({
@@ -83,11 +96,11 @@ app.use(serverRoutes);
 
 //database 
 db.sequelize.authenticate()
-.then(() => {
-  console.log('Connection has been established successfully.');
-})
-.catch((err) => {
-  console.log('Unable to connect to the database:', err);
-});
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch((err) => {
+    console.log('Unable to connect to the database:', err);
+  });
 
 export default app;
