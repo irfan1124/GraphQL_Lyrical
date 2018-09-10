@@ -4,8 +4,13 @@ type Song {
 }
 
 type Query {
-    song(id: Int!): Song,
-    songs: [Song]
+    song(id: Int!): song,
+    songs: [song]
+}
+
+type song {
+  id: Int!,
+  title: String!,
 }
 
 type SongInput {

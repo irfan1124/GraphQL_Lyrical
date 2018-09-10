@@ -6,13 +6,15 @@ const path = require('path');
 import { ApolloServer } from 'apollo-server-express';
 const bodyParser = require('body-parser');
 import { makeExecutableSchema } from 'graphql-tools'
+import joinMonsterAdapt from 'join-monster-graphql-tools-adapter';
 
 const typeDefs = require('./schema').default;
 const resolvers = require('./index').default
 import serverRoutes from "./middleware/routes";
-import { initializeFirebaseApp, loginWithFirebase, verifyToken, addScopeToReq, revokeRefreshToken, getFirebaseUser } from './auth/firebase-auth'
+import { initializeFirebaseApp, loginWithFirebase, verifyToken, addScopeToReq, revokeRefreshToken, getFirebaseUser } from './auth/firebase-auth';
+import joinMonsterMetadata from './schema/joinMonsterMetadata';
+import db from './db/config/config';
 
-const db = require('./db/config/config')
 const app = express();
 
 app.use(express.static('dist'));
@@ -24,6 +26,8 @@ app.set('view engine', 'hbs');
 
 var router = express.Router();
 app.use(router);
+
+app.use(bodyParser.json());
 
 //initialize the firebase app with FirebaseAdmin and Firebase SDK
 initializeFirebaseApp();
@@ -78,13 +82,18 @@ app.get('/user', verifyToken, addScopeToReq, guard.check(['user:read']), errorHa
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 
+joinMonsterAdapt(schema, joinMonsterMetadata);//
+const dialect = { dialect: 'mysql' };
 //Apollo Server
 const server = new ApolloServer({
   // These will be defined for both new or existing servers
   schema,
+  context: {
+    db,
+    dialect
+  }
   //rootValue
 });
-app.use(bodyParser.json());
 // app.use('/graphql', expressGraphQL({
 //   schema,
 //   rootValue,
@@ -103,4 +112,5 @@ db.sequelize.authenticate()
     console.log('Unable to connect to the database:', err);
   });
 
-export default app;
+export default app; 
+ 

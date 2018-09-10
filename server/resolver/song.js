@@ -1,27 +1,33 @@
-import db from '../db/config/config';
+import models from '../db/config/config'
 import joinMonster from 'join-monster';
-
+const knex = require('knex')(require('../db/config/knexConfig'))
+const options = { dialect : 'mysql' };
 export default {
     Query: {
-        songs: () => {
+        songs: (parent, args, {db, dialect}, info) => {
             // return db.song.findAll({})
-            joinMonster(info, args, (sql) => {
-                console.log('all songs');
-                console.log(sql);
-                db.sequelize.query(sql, { type: db.sequelize.QueryType.SELECT });
-            })
+            return joinMonster(info, args, sql => {
+                        console.log(sql);
+                        return knex.raw(sql).then(result => result[0])
+                }, dialect);
         },
-        song: (args) => {
-            return db.song.findOne({
-                    where: {
-                        id: args.id
-                    }
-                })
-                .then(song => {
-                    console.log(song)
-                    return song;
-                });
-        }
+        song: (parent, args, {db, dialect}, info) => {
+            return joinMonster(info, args, sql  => {
+                console.log('sql');
+                console.log(sql);
+                return models.sequelize.query(sql, { type: models.sequelize.QueryTypes.SELECT }).then(result => result)
+            }, dialect);
+        },
+        // song: (parent, {id}, info) => {
+        //     return db.song.findOne({
+        //             where: {
+        //                 id: id
+        //             }
+        //         })
+        //         .then(song => {
+        //             return song;
+        //         });
+        // }
     },
 	Mutation: {
         addSong: (args) => {

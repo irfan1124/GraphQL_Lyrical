@@ -11,7 +11,8 @@
     "build:server": "nodemon --watch server  --exec  babel-node index.js ",
     "build:dev": "webpack --watch",
     "start": "npm-run-all --parallel build:*",
-    "schema": "sequelize-auto -h '127.0.0.1' -d 'lyrical' -u 'poseidon' -x 'poseidon' -p '3306'  --dialect mysql -o './server/db/models'"
+    "schema": "sequelize-auto -h '127.0.0.1' -d 'lyrical' -u 'poseidon' -x 'poseidon' -p '3306'  --dialect mysql -o './server/db/models'",
+    "compile": "babel server shared index.js --out-dir .compiled --source-maps --watch"
   },
   "author": "",
   "license": "ISC",
@@ -46,6 +47,7 @@
     "join-monster": "^2.1.0",
     "join-monster-graphql-tools-adapter": "0.0.3",
     "jsonwebtoken": "^8.3.0",
+    "knex": "^0.15.2",
     "lodash": "^4.17.4",
     "merge-graphql-schemas": "^1.5.3",
     "mysql": "^2.16.0",
